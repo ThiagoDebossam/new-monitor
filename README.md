@@ -13,10 +13,12 @@ pulse.init({ apiKey: process.env.PULSE_API_KEY, monitor: "api-pagamentos" });
 
 ## Estado atual
 
-**Fase 0 (fundação) em andamento.** Discovery concluído; o monorepo está escrito mas ainda não
-foi instalado nem passou por CI — a última sessão não tinha acesso ao registro do npm nem a um
-daemon Docker para validar. Nenhuma lógica de produto existe ainda (SDK, detecção, e-mail): isso
-começa na Fase 1.
+**Fases 0 e 1 escritas, ainda não instaladas nem validadas.** Discovery concluído; o núcleo do
+heartbeat (schema, rotas de ingestão, detector, SDK) está implementado, mas esta sessão também
+não teve acesso ao registro do npm nem a um daemon Docker para instalar dependências e rodar os
+testes de integração (Testcontainers). Antes de seguir para a Fase 2, alguém com rede normal
+precisa rodar `pnpm install`, gerar a migration inicial (`pnpm --filter @pulse/db run generate`)
+e então `pnpm test` — ver `CLAUDE.md` para o estado exato.
 
 | Documento | O que contém |
 |---|---|
