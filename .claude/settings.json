@@ -23,8 +23,6 @@
       "Bash(pnpm format:*)",
       "Bash(pnpm db:*)",
       "Bash(pnpm --filter:*)",
-      "Bash(pnpm -r:*)",
-      "Bash(pnpm exec:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
