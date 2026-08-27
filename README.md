@@ -13,7 +13,10 @@ pulse.init({ apiKey: process.env.PULSE_API_KEY, monitor: "api-pagamentos" });
 
 ## Estado atual
 
-**Fase de discovery concluída. Nenhum código de produto escrito ainda.**
+**Fase 0 (fundação) em andamento.** Discovery concluído; o monorepo está escrito mas ainda não
+foi instalado nem passou por CI — a última sessão não tinha acesso ao registro do npm nem a um
+daemon Docker para validar. Nenhuma lógica de produto existe ainda (SDK, detecção, e-mail): isso
+começa na Fase 1.
 
 | Documento | O que contém |
 |---|---|
@@ -21,6 +24,19 @@ pulse.init({ apiKey: process.env.PULSE_API_KEY, monitor: "api-pagamentos" });
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Fases de desenvolvimento, entregáveis e critérios de pronto |
 | [`docs/adr/`](docs/adr/) | Decisões arquiteturais registradas (ADRs) |
 | [`CLAUDE.md`](CLAUDE.md) | Harness: contexto, convenções e regras de trabalho para sessões de IA |
+
+## Começando
+
+```bash
+cp .env.example .env
+pnpm install
+docker compose up -d   # Postgres + Mailpit
+pnpm test              # inclui teste de integração via Testcontainers
+pnpm dev                # web (localhost:3000) + detector
+```
+
+Requer Node 22+, pnpm 10+ e Docker. Ainda não há `pnpm-lock.yaml` commitado — a primeira
+`pnpm install` com acesso normal à rede deve gerá-lo, e o resultado deve ser commitado.
 
 ## Decisões fechadas
 
