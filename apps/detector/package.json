@@ -9,6 +9,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
+  "dependencies": {
+    "@pulse/db": "workspace:*"
+  },
   "devDependencies": {
     "@types/node": "catalog:",
     "tsx": "catalog:",

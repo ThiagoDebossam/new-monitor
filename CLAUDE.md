@@ -11,19 +11,29 @@ percebe o silêncio; um e-mail avisa. SaaS multi-tenant.
 | Começar uma fase | [`docs/ROADMAP.md`](docs/ROADMAP.md) |
 | Mudar arquitetura | [`docs/adr/`](docs/adr/) — e escreva um ADR novo |
 
-**Estado atual: Fase 0 (fundação) escrita, ainda não instalada nem validada em CI.**
-`pnpm install` não roda nesta sessão — o sandbox bloqueia `registry.npmjs.org` e não tem daemon
-Docker. Nenhum arquivo foi verificado além de parsing estático (JSON/YAML válidos, sintaxe TS
-correta). A primeira coisa a fazer com acesso normal à rede é rodar `pnpm install` e, se algo
-não resolver, corrigir antes de seguir para a Fase 1.
+**Estado atual: Fase 0 e Fase 1 escritas, ainda não instaladas nem validadas em CI.**
+`pnpm install` não roda nesta sessão — o sandbox bloqueia `registry.npmjs.org` (403 mesmo sem
+proxy, ver `/root/.ccr/README.md`) e não tem daemon Docker. Nenhum arquivo foi verificado além
+de parsing estático (JSON/YAML válidos, sintaxe TS correta, leitura adversarial do SQL das CTEs
+de `packages/db`). Os testes de integração (Testcontainers) e a suíte inteira nunca rodaram.
+A primeira coisa a fazer com acesso normal à rede:
+
+```bash
+pnpm install
+pnpm --filter @pulse/db run generate   # gera a migration inicial a partir de schema.ts —
+                                        # migrations/ está vazio; nada roda sem isso
+pnpm typecheck && pnpm lint && pnpm test
+```
+
+Se algo não resolver, corrigir antes de seguir para a Fase 2.
 
 ## Estrutura atual
 
 ```
-apps/web         Next.js — placeholder; POST /api/v1/heartbeat chega na Fase 1
-apps/detector    scaffold; varredura real chega na Fase 1
-packages/sdk     @pulse/node — build ESM+CJS via tsup; init()/heartbeat chegam na Fase 1
-packages/db      cliente Drizzle + teste de integração via Testcontainers; schema vem na Fase 1
+apps/web         Next.js — POST /api/v1/heartbeat e /api/v1/heartbeat/offline (Fase 1)
+apps/detector    processo separado; sweep() a cada 10s (ADR-0004, Fase 1)
+packages/sdk     @pulse/node — init(), timer unref, fila+backoff, SIGTERM/SIGINT (Fase 1)
+packages/db      schema, heartbeat/detector/api-keys (Fase 1); migration inicial não gerada
 packages/emails  scaffold; templates chegam na Fase 2
 apps/notifier    ainda não existe — criado quando a Fase 2 precisar dele (ver ADR-0009)
 ```
@@ -94,6 +104,10 @@ casos de borda — são o produto:
 - Dez quedas em cinco minutos → no máximo dois e-mails
 
 O primeiro é o mais importante. Um monitor que alarma em deploy é desinstalado em duas semanas.
+
+Os cinco primeiros estão implementados em `packages/db/src/scenarios.test.ts`. O último (dez
+quedas em cinco minutos → no máximo dois e-mails) depende do sistema de e-mail e fica para a
+Fase 2.
 
 ## Armadilhas conhecidas
 

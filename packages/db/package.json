@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./client": "./src/client.ts"
+    "./client": "./src/client.ts",
+    "./schema": "./src/schema.ts",
+    "./api-keys": "./src/api-keys.ts",
+    "./heartbeat": "./src/heartbeat.ts",
+    "./detector": "./src/detector.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
