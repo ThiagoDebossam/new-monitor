@@ -11,18 +11,21 @@ percebe o silêncio; um e-mail avisa. SaaS multi-tenant.
 | Começar uma fase | [`docs/ROADMAP.md`](docs/ROADMAP.md) |
 | Mudar arquitetura | [`docs/adr/`](docs/adr/) — e escreva um ADR novo |
 
-**Estado atual: discovery concluído, Fase 0 não iniciada.** Não há código de produto no
-repositório. Os comandos abaixo descrevem o alvo, não o presente.
+**Estado atual: Fase 0 (fundação) escrita, ainda não instalada nem validada em CI.**
+`pnpm install` não roda nesta sessão — o sandbox bloqueia `registry.npmjs.org` e não tem daemon
+Docker. Nenhum arquivo foi verificado além de parsing estático (JSON/YAML válidos, sintaxe TS
+correta). A primeira coisa a fazer com acesso normal à rede é rodar `pnpm install` e, se algo
+não resolver, corrigir antes de seguir para a Fase 1.
 
-## Estrutura alvo
+## Estrutura atual
 
 ```
-apps/web         Next.js — painel + POST /api/v1/heartbeat
-apps/detector    varredura de instâncias expiradas
-apps/notifier    consumo da fila de e-mails
-packages/sdk     @pulse/node — publicado no npm
-packages/db      schema Drizzle, migrations, cliente
-packages/emails  templates React Email
+apps/web         Next.js — placeholder; POST /api/v1/heartbeat chega na Fase 1
+apps/detector    scaffold; varredura real chega na Fase 1
+packages/sdk     @pulse/node — build ESM+CJS via tsup; init()/heartbeat chegam na Fase 1
+packages/db      cliente Drizzle + teste de integração via Testcontainers; schema vem na Fase 1
+packages/emails  scaffold; templates chegam na Fase 2
+apps/notifier    ainda não existe — criado quando a Fase 2 precisar dele (ver ADR-0009)
 ```
 
 ## Comandos
